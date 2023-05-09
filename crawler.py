@@ -4,6 +4,7 @@ from tld import get_fld
 from seleniumwire import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
+from tqdm import tqdm
 
 import utils
 
@@ -32,7 +33,7 @@ def crawl(options, domains, noop, accept):
         
     # Loop over all domains passed in the script command. Is a list of one domain if 
     # only a single URL is passed(-u).
-    for domain in domains:
+    for domain in tqdm(domains):
         visit = {}
 
         visit['domain'] = domain
