@@ -1,0 +1,5 @@
+.vscode/* 
+__pycache__/*
+crawl_data/*
+chromedriver
+test.csv
