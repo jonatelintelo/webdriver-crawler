@@ -137,7 +137,14 @@ def get_tracker_data(request, tracker_dict, tracker_dict_values):
     """
     tracker_entity = None
     tracker_domain = None
-    domain = get_fld(request.url)
+    url = request.url
+    try:
+        if not url.startswith("http://") and not url.startswith("https://"):
+            url = "https://" + url
+        domain = get_fld(url)
+    except:
+        print(f"get_fld error for {url}")
+        domain = None
     
     # Check if request domain is in the list of known tracker domains.
     if domain in tracker_dict_values:
@@ -194,7 +201,8 @@ def get_header_data(driver, tracker_dict, tracker_dict_values):
         request_headers.append([(key[0:512],request.headers[key][0:512]) for key in request.headers])
         unix_stamp = time.mktime(request.date.timetuple())*1e3 + request.date.microsecond/1e3
         request_date.append(unix_stamp)
-        response_headers.append([(key[0:512],request.response.headers[key][0:512]) for key in request.response.headers])
+        if request and request.response and request.response.headers:
+            response_headers.append([(key[0:512],request.response.headers[key][0:512]) for key in request.response.headers])
 
     return list(tracker_domains), list(tracker_entities), request_headers, response_headers, request_date, x_domain_redirects
 
@@ -233,12 +241,21 @@ def get_x_domain_redirects(request, tracker_dict_values):
         (str, str): Tuple containing the source domain and target domain.
     """    
     source_domain = request.url
-    target_domain = request.response.headers['location']
+    target_domain = None
+    if request and request.response and request.response.headers:
+        target_domain = request.response.headers['location']
+    else:
+        pass
+
+    # If the target domain is merely a different page on the same (sub)domain
+    if target_domain is not None and target_domain.startswith("/"):
+        # Discard (as fld will be the same)
+        target_domain = None
 
     # Check if the URLS are valid, if they signify a redirect, if they are cross domain
     # and not equal to each other.
     if request.url != None \
-            and request.response.headers['location'] != None \
+            and target_domain != None \
             and str(request.response.status_code).startswith('3') \
             and get_fld(source_domain) != get_fld(target_domain) \
             and ((get_fld(source_domain) in tracker_dict_values) or (get_fld(target_domain) in tracker_dict_values)):
