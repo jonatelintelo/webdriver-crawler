@@ -84,7 +84,7 @@ def accept_cookies(driver):
                 break
         # Increment number of errors if error occurs on clicking.
         except Exception as e:
-            logging.exception("Consent click error occurred")
+            logging.error(f"Consent click error occurred on: {driver.current_url}")
             consent_click_errors += 1
             
     return consent_click_errors
@@ -113,11 +113,11 @@ def check_domain(domain, port = 80):
     # If connection can not be established handle and log errors.
     except socket.timeout:
         # The connection timed out.
-        logging.exception(f"Connection timed out on: {domain}")
+        logging.error(f"Connection timed out on: {domain}")
         timeout_errors += 1
     except Exception as e:
         # The domain name could not be resolved.
-        logging.exception(f"DNS error occurred on: {domain}")
+        logging.error(f"DNS error occurred on: {domain}")
         dns_errors += 1
 
     return dns_errors, timeout_errors
@@ -143,7 +143,7 @@ def get_tracker_data(request, tracker_dict, tracker_dict_values):
             url = "https://" + url
         domain = get_fld(url)
     except:
-        print(f"get_fld error for {url}")
+        logging.error(f"get_fld error occured on: {url}")
         domain = None
     
     # Check if request domain is in the list of known tracker domains.
