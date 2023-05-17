@@ -70,6 +70,10 @@ def crawl_domain(domain, options, noop, accept, tracker_dict, tracker_dict_value
         visit["errors"] = errors
         return
 
+    # Register canvas fingerprinting handler
+    utils.register_canvas_fingerprint_interceptor(driver)
+
+
     # Record and save page loading time and load the page.
     visit["pageload_start_ts"] = time.time()
     driver.get(f"http://www.{domain}")

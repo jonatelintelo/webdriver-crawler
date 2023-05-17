@@ -4,6 +4,7 @@ import re
 import logging
 from tld import get_fld
 from selenium.webdriver.common.by import By
+import os
 
 def get_tracker_dict(data):
     """Return tracker dictionary from .json format to dictionary
@@ -260,3 +261,26 @@ def get_x_domain_redirects(request, tracker_dict_values):
             and get_fld(source_domain) != get_fld(target_domain) \
             and ((get_fld(source_domain) in tracker_dict_values) or (get_fld(target_domain) in tracker_dict_values)):
         return (get_fld(source_domain), get_fld(target_domain))
+
+
+# TODO: WIP: Untested
+def register_canvas_fingerprint_interceptor(driver):
+    """Register handler for toDataURL requests on the canvas tag and save accessed images.
+
+    Args:
+        driver: The webdriver to register the intercept handler to. 
+    """
+    # Enable request interception
+    driver.request_interception = True
+
+    # Define a custom request handler to intercept canvas.toDataURL requests
+    def intercept_request_handler(request):
+        if "toDataURL" in request.url:
+            # Access the captured image data from the intercepted request
+            image_data = request.response.body
+            with open(os.path.join("crawl_data", driver.current_url + "_canvas.png")) as f:
+                f.write(image_data)
+
+    # Register the custom request handler
+    # driver.scopes = [(By.TAG_NAME, 'canvas')]
+    driver.request_interceptor = intercept_request_handler
