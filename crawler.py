@@ -33,7 +33,7 @@ def crawl(options, domains, noop, accept):
     # Loop over all domains passed in the script command. Is a list of one domain if
     # only a single URL is passed(-u).
     # Crawl using num_thread threads
-    num_threads = 8
+    num_threads = 1
 
     with ThreadPoolExecutor(max_workers=num_threads) as executor:
         futures = [executor.submit(crawl_domain, domain, options, noop, accept, tracker_dict, tracker_dict_values) for domain in domains]

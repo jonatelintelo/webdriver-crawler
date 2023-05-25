@@ -275,6 +275,7 @@ def register_canvas_fingerprint_interceptor(driver):
 
     # Define a custom request handler to intercept canvas.toDataURL requests
     def intercept_request_handler(request):
+        print(request.url)
         if "toDataURL" in request.url:
             # Access the captured image data from the intercepted request
             image_data = request.response.body
