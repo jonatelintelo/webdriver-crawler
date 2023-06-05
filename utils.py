@@ -78,6 +78,7 @@ def accept_cookies(driver):
 
     # Loop over all candidates c in contents and
     # click if the button text correponds to a word in the set.
+    # Borrowed from https://github.com/marty90/priv-accept/blob/7c87be9441a6425160611d7fd91fd1e4ae7bceaf/priv-accept.py
     for c in contents:
         try:
             if c.text.lower().strip(' ✓›!\n') in accept_words_list:
