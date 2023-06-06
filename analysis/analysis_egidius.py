@@ -2,46 +2,38 @@
 
 import json
 import matplotlib.pyplot as plt
+from typing import Dict, Tuple, List
 
 
+# Return a list of [tranco_rank, page_url] pairs
 def tranco_pages():
     with open("../tranco-top-500-safe.csv") as f:
-        f.readline()
+        f.readline()  # Skip the header
         lines = f.readlines()
 
-    ret = []
-    for line in lines:
-        line = line.strip().split(",")
-        num = int(line[0])
-        site = line[1]
-        ret += [
-            [num, site],
-        ]
-    return ret
+    # csv is simple enough to not bother with csv reader
+    return [[int(line.split(",")[0]), line.split(",")[1].strip()] for line in lines]
 
 
-def page_json(url):
-    accept_json = url + "_accept.json"
-    noop_json = url + "_noop.json"
-    try:
-        with open("../crawl_data/" + accept_json) as f:
-            accept_data = json.load(f)
-    except Exception:
-        accept_data = {}
-    try:
-        with open("../crawl_data/" + noop_json) as f:
-            noop_data = json.load(f)
-    except Exception:
-        noop_data = {}
-    return (accept_data, noop_data)
+# Return json data for url as accept and noop tuple
+def page_json(url: str):
+    # Define a helper function to load json data from a file
+    def load_json(file: str) -> Dict:
+        try:
+            with open("../crawl_data/" + file) as f:
+                return json.load(f)
+        except Exception:
+            return {}
+
+    # Append the suffixes to the url and load the json data
+    accept_json = load_json(url + "_accept.json")
+    noop_json = load_json(url + "_noop.json")
+    return (accept_json, noop_json)
 
 
 # string to int, with None = 0
 def jint(i):
-    if i:
-        return int(i)
-    else:
-        return 0
+    return int(i) if i else 0
 
 
 # 1
@@ -95,6 +87,7 @@ def trackers_vs_rank():
     plt.xlabel("Tranco rank")
     plt.ylabel("Number of distinct tracker domains")
     plt.legend()
+    plt.savefig("tracker_vs_tranco.png", dpi=900)
     plt.show()
 
 
@@ -170,4 +163,9 @@ def redirects():
     print(sorted(n_pairs.items(), key=lambda item: item[1])[-10:])
 
 
-trackers_vs_rank()
+#sum_errors() #1
+#trackers_vs_rank() #5
+#tracker_entities() #6
+#longest_cookie() #7
+most_cookies() #8
+#redirects() #9
