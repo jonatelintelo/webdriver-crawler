@@ -1,6 +1,6 @@
-# CSCS_crawler
+# Webdriver Crawler
 
-Crawler for the second assignment of Capita Selecta in Cyber Security at Radboud University.
+This repository contains the webdriver crawler for the second assignment of Capita Selecta in Cyber Security (2023) at Radboud University. The crawler is made using Selenium and works for Chrome.
 
 The folder [crawl-data](https://github.com/jonatelintelo/webdriver-crawler/edit/main/crawl_data) contains all JSON files produced by the crawl-accept and crawl-noop runs.
 
