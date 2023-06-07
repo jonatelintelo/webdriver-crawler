@@ -2,6 +2,14 @@
 
 Crawler for the second assignment of Capita Selecta in Cyber Security at Radboud University.
 
+The folder [crawl-data](https://github.com/jonatelintelo/webdriver-crawler/edit/main/crawl_data) contains all JSON files produced by the crawl-accept and crawl-noop runs.
+
+The folder [crawl-src](https://github.com/jonatelintelo/webdriver-crawler/edit/main/crawl_src) contains all code and data to run the webdriver crawler.
+
+The file [accept_words.txt](https://github.com/jonatelintelo/webdriver-crawler/edit/main/crawl_src/accept_words.txt) contains a list of words used to scan and click on consent button.
+
+The file [services.json](https://github.com/jonatelintelo/webdriver-crawler/edit/main/crawl_src/services.json) contains a list of tracker entities and their associated tracker domains.
+
 ## Installation
 
 ```bash
@@ -20,10 +28,5 @@ python script.py -i tranco-top-500-safe.csv --accept
 
 ```
 
-## To Do
-
-Still need to implement the bonus task of fingerprinting detection, cookies (bullet points 7,8 and 10) and the analysis.
-
-For cookies. Current frame cookies can be obtained with driver.get_cookies(), although tracker cookies can not be found here. To look for tracker cookies we have to check the response/request headers probably. Response cookies contain set_cookie headers with all required analysis info. The request cookie headers only contain lists of name:value strings of cookies. The guess here is that we have to lookup the name:value strings of request cookie headers and compare them with the names and values found in get_cookies() and in the response set_cookie headers.
-
-We also have not yet tried to run the crawl on all 500 domains, just a small subset. get_fld() tends to throw errors seemlingly at random, which has yet to be fixed.
+## Required Download
+It might occur that running the crawler results in the following error: `ERROR: No matching issuer found`. To fix this, add [ca.crt](https://github.com/jonatelintelo/webdriver-crawler/edit/main/ca.crt) to your trusted Chrome certificates. This will make the webdriver trusted by Chrome and resolve the error.
