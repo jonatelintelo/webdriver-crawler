@@ -11,7 +11,7 @@ import crawler
 
 def main():
     # Create required folders, folders are created in directory where command is executed.
-    required_dirs = ['crawler_src', 'analysis', 'crawl_data']
+    required_dirs = [os.path.join('..','crawler_src'), os.path.join('..','analysis'), os.path.join('..','crawl_data')]
     for directory in required_dirs:
         if not os.path.exists(directory):
             os.makedirs(directory)

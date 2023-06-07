@@ -280,7 +280,7 @@ def register_canvas_fingerprint_interceptor(driver):
         if "toDataURL" in request.url:
             # Access the captured image data from the intercepted request
             image_data = request.response.body
-            with open(os.path.join("crawl_data", driver.current_url + "_canvas.png")) as f:
+            with open(os.path.join("..", "crawl_data", driver.current_url + "_canvas.png")) as f:
                 f.write(image_data)
 
     # Register the custom request handler
